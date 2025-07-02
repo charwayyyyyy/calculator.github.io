@@ -1,4 +1,4 @@
-# Stylish iOS Calculator
+# Calculator
 
 A calculator featuring 3D effects using Three.js and smooth animations with GSAP. The calculator includes server-side calculations using PHP for precision and security.
 
