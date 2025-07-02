@@ -1,121 +1,249 @@
 @use "sass:color";
 
-$background-color: #000000;
-$operator-color: #ff9f0a;
-$number-color: #333333;
-$text-color: #ffffff;
-$transition-speed: 0.2s;
+// Variables
+$background-light: #f5f5f5;
+$background-dark: #000000;
+$display-light: #ffffff;
+$display-dark: #1c1c1e;
+$text-light: #000000;
+$text-dark: #ffffff;
+$operator-light: #ff9f0a;
+$operator-dark: #3478f6;
+$number-light: #333333;
+$number-dark: #505050;
+$shadow: rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
 
+// Mixins
 @mixin button-base {
-    border: none;
-    outline: none;
-    border-radius: 50%;
-    font-size: 2rem;
-    padding: 0;
-    cursor: pointer;
-    transition: all $transition-speed ease;
-    
-    &:active {
-        transform: scale(0.95);
-    }
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: $transition;
+  position: relative;
+  overflow: hidden;
+
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
+// Base styles
 body {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: $background-color;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: $background-light;
+  transition: $transition;
+
+  &.dark-theme {
+    background-color: $background-dark;
+
+    .calculator {
+      background-color: $display-dark;
+      color: $text-dark;
+    }
+
+    .operator {
+      background-color: $operator-dark;
+      color: $text-dark;
+    }
+
+    .number {
+      background-color: $number-dark;
+      color: $text-dark;
+    }
+
+    .theme-toggle {
+      .sun-icon {
+        display: none;
+      }
+      .moon-icon {
+        display: block;
+      }
+    }
+  }
 }
 
-.calculator {
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
-    
-    .display {
-        height: 120px;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        align-items: flex-end;
-        word-wrap: break-word;
-        word-break: break-all;
-        
-        .previous-operand {
-            color: rgba($text-color, 0.75);
-            font-size: 1.5rem;
-        }
-        
-        .current-operand {
-            color: $text-color;
-            font-size: 4rem;
-            font-weight: 300;
-        }
-    }
-    
-    .keypad {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
-        padding: 20px;
-        
-        button {
-            @include button-base;
-            width: 80px;
-            height: 80px;
-            color: $text-color;
-            
-            &.number {
-                background-color: $number-color;
-                
-                &:hover {
-                    background-color: color.adjust($number-color, $lightness: 10%);
-                }
-            }
-            
-            &.operator {
-                background-color: $operator-color;
-                color: $text-color;
-                
-                &:hover {
-                    background-color: color.adjust($operator-color, $lightness: 10%);
-                }
-                
-                &[data-action="clear"],
-                &[data-action="plusMinus"],
-                &[data-action="percentage"] {
-                    background-color: #a5a5a5;
-                    color: #000000;
-                    
-                    &:hover {
-                        background-color: color.adjust(#a5a5a5, $lightness: 10%);
-                    }
-                }
-            }
-            
-            &.zero {
-                grid-column: span 2;
-                width: 100%;
-                border-radius: 40px;
-                padding-left: 30px;
-                text-align: left;
-            }
-        }
-    }
-}
+// Theme toggle
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 1000;
 
-// 3D effect styles
-.calculator-3d {
-    position: absolute;
-    top: 0;
-    left: 0;
+  svg {
     width: 100%;
     height: 100%;
-    pointer-events: none;
-    z-index: -1;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .sun-icon {
+    display: block;
+  }
+
+  .moon-icon {
+    display: none;
+  }
+}
+
+// Calculator
+.calculator {
+  width: 320px;
+  background-color: $display-light;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 30px $shadow;
+  transition: $transition;
+}
+
+.calculator-3d {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+// Display
+.display {
+  padding: 20px;
+  text-align: right;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.previous-operand {
+  font-size: 1.5rem;
+  opacity: 0.7;
+  height: 30px;
+}
+
+.current-operand {
+  font-size: 3rem;
+  height: 50px;
+}
+
+// Keypad
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+
+// Buttons
+.operator {
+  @include button-base;
+  background-color: $operator-light;
+  color: $text-dark;
+
+  &:hover {
+    background-color: color.adjust($operator-light, $lightness: 10%);
+  }
+}
+
+.number {
+  @include button-base;
+  background-color: $number-light;
+  color: $text-dark;
+
+  &:hover {
+    background-color: color.adjust($number-light, $lightness: 10%);
+  }
+
+  &.zero {
+    grid-column: span 2;
+    border-radius: 25px;
+  }
+}
+
+// Ripple effect
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+// Error message
+.calculator-error {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ff3b30;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.3s ease-out forwards;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translate(-50%, -20px);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .calculator {
+    width: 100%;
+    max-width: 320px;
+    margin: 10px;
+  }
+
+  .display {
+    height: 80px;
+  }
+
+  .current-operand {
+    font-size: 2.5rem;
+  }
+
+  .previous-operand {
+    font-size: 1.2rem;
+  }
+
+  .keypad {
+    gap: 8px;
+  }
+
+  .operator,
+  .number {
+    font-size: 1.2rem;
+  }
 }
