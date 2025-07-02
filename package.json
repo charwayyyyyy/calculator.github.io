@@ -1,0 +1,12 @@
+{
+  "name": "ios-style-calculator",
+  "version": "1.0.0",
+  "description": "A stylish iOS-style calculator with 3D effects and animations",
+  "scripts": {
+    "sass:watch": "sass --watch css/style.scss:css/style.css",
+    "sass:build": "sass css/style.scss:css/style.css --style compressed"
+  },
+  "dependencies": {
+    "sass": "^1.62.0"
+  }
+}
